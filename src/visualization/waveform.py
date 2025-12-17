@@ -7,8 +7,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from matplotlib.font_manager import FontProperties
 from typing import Optional
 from pathlib import Path
+
+# 配置中文字体支持
+try:
+    # 混合字体策略：DejaVu Sans（英文）+ Droid Sans Fallback（中文后备）
+    mpl.rcParams["font.sans-serif"] = ["DejaVu Sans", "Droid Sans Fallback", "Arial"]
+    mpl.rcParams["axes.unicode_minus"] = False  # 解决负号显示问题
+except Exception:
+    # 如果配置失败，使用默认字体
+    pass
 
 # 配置 Matplotlib 学术论文标准（参考 research.md Section 6.2）
 mpl.rcParams["savefig.dpi"] = 300  # 论文打印要求
