@@ -1,50 +1,352 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 1.1.1 → 1.2.0
+- Modified principles: None
+- Added sections: X. 学术规范与可视化标准 (Academic Standards & Visualization)
+- Removed sections: None
+- Templates requiring updates:
+  ✅ plan-template.md - 需添加可视化标准检查项
+  ✅ src/visualization/waveform.py - 需更新字体配置为学术标准
+  ✅ research.md - 需添加字体配置说明
+- Follow-up TODOs:
+  - 安装宋体（SimSun）和 Times New Roman 字体（如果系统未预装）
+  - 更新所有可视化模块使用学术标准字体
+-->
+
+# UWB Paper Development Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. 生态复用优先 (Ecosystem Reuse First)
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+复用主流稳定库与官方 SDK，锁定最新稳定版本。禁止重复造轮子，除非有明确的技术理由（性能、安全、特定功能缺失）且经过团队评审批准。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**理由**: 成熟的开源生态已经解决了 80% 的常见问题，并经过大规模生产验证。重新实现不仅浪费时间，还会引入未经验证的 bug 和安全漏洞。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**可测试标准**:
+- 每个新依赖必须有明确的版本号（禁止 `latest` 或 `*`）
+- 选择标准库优于第三方库，选择官方 SDK 优于社区实现
+- 任何自研组件必须在 PR 中说明为何现有方案不可用
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. 质量第一 (Quality First)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+先修复报错再继续工作。所有技术结论必须有证据支撑（日志、测试结果、profiling 数据、官方文档引用）。禁止基于猜测或假设做决策。
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+**理由**: 带着错误继续开发就像在流沙上建高楼，最终会全盘崩溃。技术决策必须基于事实，而非直觉或"某人说过"。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**可测试标准**:
+- CI/CD pipeline 必须全绿才能合并
+- 技术方案文档必须包含证据链接（benchmark、官方文档、测试结果）
+- 代码审查中的任何技术判断必须能回溯到具体证据
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. 工具优先 (Tool-First Approach)
+
+研究、分析、实现与验证必须通过既定工具链完成。禁止手动操作可自动化的任务。每个工具选择必须有明确目的。
+
+**理由**: 工具确保一致性、可重复性和可追溯性。手动操作容易出错且难以审计。
+
+**可测试标准**:
+- 所有代码必须通过配置的 linter 和 formatter
+- 数据库迁移必须通过迁移工具，禁止直接 SQL 修改
+- 部署必须通过 CI/CD，禁止本地手动推送
+- 代码分析必须使用既定工具（Grep、Glob、Read）而非盲目猜测
+
+### IV. 透明记录 (Transparent Documentation)
+
+关键决策、证据、变更需保存在指定目录并可追溯。所有代码必须包含中文文档和必要的细节注释。禁止占位符代码（`TODO`、`NotImplemented`、`pass`）进入主分支。
+
+**理由**: 代码的生命周期远超过编写者的记忆周期。6 个月后没人记得"为什么这样写"，文档是唯一的真相来源。
+
+**可测试标准**:
+- 每个函数/类必须有文档字符串（中文）说明用途
+- 关键决策必须记录在 `specs/` 或 `docs/decision-records/`
+- PR 必须包含变更说明，不能只写"fix bug"或"update code"
+- 代码中的魔数必须有注释解释来源
+
+### V. 结果导向 (Outcome-Driven)
+
+以量化目标、SLO/SLI 达成为准绳。功能完成的定义是"可测、可观测、满足性能指标"，而非"代码写完了"。
+
+**理由**: "能跑"和"能用"是两码事。生产环境的成功取决于可测量的业务指标，而非开发者的主观判断。
+
+**可测试标准**:
+- 每个 feature spec 必须包含成功标准（Success Criteria）
+- 性能敏感功能必须包含 benchmark 和性能目标
+- 关键路径必须有监控和告警
+- "完成"定义：测试通过 + 文档完整 + 性能达标 + 可观测
+
+### VI. 简单优先 (Simplicity First)
+
+拒绝过度设计。永远寻找最简方案。如果实现需要超过 3 层缩进，重新设计它。禁止为"未来可能的需求"添加抽象层。
+
+**理由**: 复杂性是万恶之源。每一层抽象都是认知负担和 bug 的温床。YAGNI（You Aren't Gonna Need It）不是口号，是生存法则。
+
+**可测试标准**:
+- 代码审查必须质疑"这个抽象是否必要？"
+- 新增设计模式必须说明解决的具体问题（不能是"为了灵活性"）
+- 缩进超过 3 层的代码块必须重构
+- 禁止"以防万一"的配置项或功能开关
+
+### VII. 向后兼容 (Backward Compatibility)
+
+向后兼容是铁律。任何 API、数据格式、配置文件的变更必须经过兼容性审查。破坏性变更需要迁移方案、deprecation 警告和充分的通知期。
+
+**理由**: "Never break userspace"（Linus Torvalds）。用户信任我们的接口稳定性，破坏兼容性会摧毁这种信任。
+
+**可测试标准**:
+- 所有公共 API 必须有版本号
+- 破坏性变更必须遵循 semantic versioning（MAJOR bump）
+- 删除 API 前必须至少一个版本的 deprecation 期
+- 数据库迁移必须同时支持旧版和新版（滚动升级）
+
+### VIII. 安全第一 (Security First)
+
+仅可运行安全命令，严禁 `rm -rf` 等破坏性操作。禁止在代码或日志中泄露密钥、令牌、内部链接。所有用户输入必须验证和清理。
+
+**理由**: 安全问题无法"后补"，必须从设计之初就内建。一次安全事故可以抹掉所有技术成就。
+
+**可测试标准**:
+- 所有环境变量中的敏感信息必须通过密钥管理服务注入
+- 代码审查必须检查 SQL 注入、XSS、CSRF 等常见漏洞
+- 所有外部输入必须经过验证（不能信任客户端）
+- 定期运行安全扫描工具（依赖漏洞检查、SAST）
+
+### IX. 版本控制与远程同步 (Version Control & Remote Sync)
+
+重要且核心的改动必须及时同步推送到 GitHub 远程仓库（`git@github.com:jiuxu2003/uwb_paper.git`）。禁止上传本机环境相关文件。所有提交必须包含清晰的 commit message。
+
+**理由**: 版本控制是团队协作的基石。及时同步确保代码不会丢失，团队成员能看到最新进展。本机环境文件（IDE 配置、临时文件、密钥）混入代码库会污染仓库并引发安全风险。
+
+**可测试标准**:
+
+**核心操作流程**（每次重要改动后必须遵循）：
+
+1. **约定式提交格式** - Commit message 必须遵循 Conventional Commits：
+   - 格式：`<type>(<scope>): <subject>`
+   - type 类型：
+     - `feat`: 新功能
+     - `fix`: 修复 bug
+     - `docs`: 文档更新
+     - `refactor`: 重构（不改变外部行为）
+     - `test`: 测试相关
+     - `chore`: 构建/工具/配置相关
+   - 示例：`feat(auth): 添加 JWT 认证功能`、`fix(api): 修复用户查询接口超时问题`
+
+2. **推送前测试验证** - 推送前必须确保本地测试通过：
+   - 运行所有相关测试（单元测试、集成测试）
+   - 确保代码通过 linter 和 formatter 检查
+   - 验证功能在本地环境正常工作
+   - 避免推送破坏性代码影响团队其他成员
+
+3. **及时推送原则** - 关键功能完成后必须在当天推送到远程：
+   - 不能攒一周甚至更久再推送（会增加合并冲突风险）
+   - 推送频率：每个独立功能点完成 → 测试通过 → 立即推送
+   - 好处：代码安全备份、团队可见进展、减少大规模合并冲突
+
+**配置要求**：
+
+- `.gitignore` 必须正确配置，排除以下文件：
+  - 环境配置：`.env`, `.env.local`, `*.env`
+  - IDE 配置：`.vscode/`, `.idea/`, `*.swp`, `*.swo`
+  - 依赖目录：`node_modules/`, `__pycache__/`, `.venv/`, `venv/`
+  - 构建产物：`dist/`, `build/`, `*.pyc`, `*.pyo`
+  - 系统文件：`.DS_Store`, `Thumbs.db`
+  - 日志文件：`*.log`
+  - Specify 框架：`.specify/`
+- 远程仓库地址必须在项目文档中明确记录（当前：`git@github.com:jiuxu2003/uwb_paper.git`）
+
+### X. 学术规范与可视化标准 (Academic Standards & Visualization)
+
+所有用于学术论文的图表、表格和可视化内容必须遵循国际学术出版标准。字体、格式、分辨率和配色方案必须符合主流期刊要求。
+
+**理由**: 学术论文的可视化质量直接影响审稿人对研究成果的第一印象。标准化的排版和字体选择是学术规范性的体现，非标准字体可能导致论文被拒稿或要求返修。
+
+**可测试标准**:
+
+**字体标准**（严格执行）：
+- **中文内容**: 必须使用**宋体（SimSun）**或**华文宋体（STSong）**
+  - 标题、标签、图例中的中文字符
+  - 注释、说明性文字
+- **英文内容和符号**: 必须使用 **Times New Roman**
+  - 拉丁字母（A-Z, a-z）
+  - 数字（0-9）
+  - 数学符号（+, -, ×, ÷, =, etc.）
+  - 标点符号
+- **混合字体策略**: Matplotlib 配置必须使用字体列表：
+  ```python
+  # 正确配置（按优先级顺序）
+  mpl.rcParams["font.serif"] = ["Times New Roman", "SimSun", "STSong"]
+  mpl.rcParams["font.sans-serif"] = ["Arial", "SimSun", "STSong"]
+  mpl.rcParams["mathtext.fontset"] = "stix"  # STIX 字体用于数学符号
+  ```
+
+**图表质量标准**：
+- **分辨率**: 所有图表必须 ≥ 300 DPI（适合打印）
+- **尺寸**: 推荐宽度 3.5 inch（单栏）或 7 inch（双栏）
+- **文件格式**:
+  - 矢量图优先：PDF, EPS（公式、线图）
+  - 位图可用：PNG（300 DPI）、TIFF（照片、复杂图像）
+  - 禁止使用：JPG（有损压缩，不适合学术图表）
+
+**配色方案**：
+- 优先使用色盲友好配色（ColorBrewer, Viridis）
+- 黑白打印时必须可辨识（使用线型 + 标记组合）
+- 避免纯红纯绿组合（色盲无法区分）
+
+**标注规范**：
+- 坐标轴标签必须包含单位（如 "时间 (ns)", "频率 (GHz)"）
+- 图例位置不能遮挡数据
+- 网格线透明度推荐 0.3，线型为虚线
+- 标题字号 14pt，标签字号 12pt，刻度字号 10pt
+
+**验收标准**：
+- 所有图表文件名必须语义化（如 `ber_vs_users.pdf` 而非 `figure1.png`）
+- 图表目录结构：`outputs/[category]/[semantic_name].[ext]`
+- 每张图表必须附带元数据文件（生成参数、数据来源）
+- 运行可视化脚本时不能有字体警告（Glyph missing from font）
+
+**字体安装指南**：
+- Linux: `sudo apt-get install fonts-liberation ttf-mscorefonts-installer` (Times New Roman)
+- macOS: 系统自带 Times New Roman 和华文宋体
+- 验证命令: `fc-list | grep -i "times\|simsun"`
+
+## Development Workflow
+
+### Linus-Style Thinking Process
+
+在编写任何代码前，必须通过以下五层思考：
+
+#### 第一层：数据接口分析
+"Bad programmers worry about the code. Good programmers worry about data structures."
+- 核心数据是什么？它们的关系如何？
+- 数据流向哪里？谁拥有它？谁修改它？
+- 有没有不必要的数据复制或转换？
+
+#### 第二层：特殊情况识别
+"好代码没有特殊情况"
+- 找出所有 if/else 分支
+- 哪些是真正的业务逻辑？哪些是糟糕设计的补丁？
+- 能否重新设计数据结构来消除这些分支？
+
+#### 第三层：复杂度审查
+"如果实现需要超过 3 层缩进，重新设计它"
+- 这个功能的本质是什么？（一句话说清）
+- 当前方案用了多少概念来解决？
+- 能否减少到一半？再一半？
+
+#### 第四层：破坏性分析
+"Never break userspace" - 向后兼容是铁律
+- 列出所有可能受影响的现有功能
+- 哪些依赖会被破坏？
+- 如何在不破坏任何东西的前提下改进？
+
+#### 第五层：实用性验证
+"Theory and practice sometimes clash. Theory loses. Every single time."
+- 这个问题在生产环境真实存在吗？
+- 有多少用户真正遇到这个问题？
+- 解决方案的复杂度是否与问题的严重性匹配？
+
+### Decision Output Format
+
+经过五层思考后，必须输出：
+
+```
+【核心判断】
+值得做：[原因] / 不值得做：[原因]
+
+【关键洞察】
+- 数据结构：[最关键的数据关系]
+- 复杂度：[可以消除的复杂性]
+- 风险点：[最大的破坏性风险]
+
+【Linus式方案】
+如果值得做：
+1. 第一步永远是简化数据结构
+2. 消除所有特殊情况
+3. 用最笨但最清晰的方式实现
+4. 确保零破坏性
+
+如果不值得做：
+"这是在解决不存在的问题。真正的问题是[XXX]。"
+```
+
+## Quality Standards
+
+### Code Review Criteria
+
+每次代码审查必须包含三层判断：
+
+**品味评分**: 好品味 / 凑合 / 垃圾
+
+**致命问题**:
+- 如果有，直接指出最糟糕的部分
+- 不使用"可能"、"也许"等模糊词汇
+- 技术批评永远针对代码，不针对人
+
+**改进方向**:
+- "把这个特殊情况消除掉"
+- "这 10 行可以变成 3 行"
+- "数据结构错了，应该是..."
+
+### Testing Requirements
+
+测试不是可选的，而是开发流程的一部分：
+
+1. **测试所编写的代码**: 完成任何代码修改后，必须立即验证：
+   - 是否影响原有代码？
+   - 是否按预期生效？
+   - 是否满足用户需求？
+
+2. **工具驱动验证**: 使用提供的工具（Bash、MCP、测试框架）进行验证，禁止"看起来应该没问题"的主观判断。
+
+3. **Test-First 原则** (如果 spec 要求测试):
+   - 测试必须先写，且必须失败（Red）
+   - 然后实现功能使测试通过（Green）
+   - 最后重构（Refactor）
+   - 跳过任何一步都违反宪法
+
+### Continuous Improvement
+
+任务结束后必须复盘：
+- 遇到了什么问题？根本原因是什么？
+- 哪些决策是正确的？哪些需要改进？
+- 有什么可以更新到项目知识库或最佳实践？
+- 更新 `docs/lessons-learned.md` 或相关文档
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### Constitutional Authority
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+本宪法是项目的最高技术准则，优先级高于任何个人偏好、团队习惯或临时决定。当规范冲突时，本宪法为最终裁决依据。
+
+### Amendment Procedure
+
+修订本宪法需要：
+1. **提案**: 在 issue 或 PR 中说明修订原因和具体变更
+2. **证据**: 提供支持修订的证据（生产问题、效率瓶颈、行业最佳实践变化）
+3. **评审**: 至少一位核心维护者审查
+4. **迁移方案**: 如果变更影响现有实践，必须提供迁移路径
+5. **版本更新**: 按照 semantic versioning 更新版本号：
+   - MAJOR: 原则删除或根本性重新定义（向后不兼容）
+   - MINOR: 新增原则或现有原则的重大扩展
+   - PATCH: 文字澄清、错别字修正、非语义调整
+
+### Compliance Review
+
+所有 PR 必须验证是否符合本宪法：
+- **自动化检查**: Linter、formatter、test coverage 等自动化门禁
+- **人工审查**: 代码审查者必须确认符合核心原则
+- **复杂度审查**: 任何新增复杂性（抽象层、依赖、特殊情况）必须在 PR 中明确说明理由
+
+### Violation Handling
+
+发现违反宪法的代码：
+1. **新代码**: PR 必须修正后才能合并，无例外
+2. **历史债务**: 记录在 `docs/tech-debt.md`，排期修复
+3. **紧急情况**: 可以先合并再修复，但必须立即创建 issue 跟踪，不能"以后再说"
+
+### Guidance Integration
+
+对于日常开发指导（如 AI 助手的行为准则），请参考 `CLAUDE.md`。该文件定义了开发过程中的交互风格、工具使用规范和决策流程，是本宪法在实践中的具体化。
+
+**Version**: 1.2.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
