@@ -24,13 +24,13 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per plan.md (src/, tests/, scripts/, outputs/ directories)
-- [ ] T002 Initialize Python project with requirements.txt (numpy>=1.24.0, scipy>=1.10.0, matplotlib>=3.7.0, pytest>=7.0.0)
-- [ ] T003 [P] Create pyproject.toml with project metadata and tool configuration
-- [ ] T004 [P] Configure black formatter (line-length=100, target-version=py311)
-- [ ] T005 [P] Configure pylint linter in .pylintrc or pyproject.toml
-- [ ] T006 [P] Update .gitignore to exclude outputs/ directory and Python cache files
-- [ ] T007 Create __init__.py files for all Python packages (src/, src/models/, src/simulation/, src/visualization/, tests/)
+- [X] T001 Create project structure per plan.md (src/, tests/, scripts/, outputs/ directories)
+- [X] T002 Initialize Python project with requirements.txt (numpy>=1.24.0, scipy>=1.10.0, matplotlib>=3.7.0, pytest>=7.0.0)
+- [X] T003 [P] Create pyproject.toml with project metadata and tool configuration
+- [X] T004 [P] Configure black formatter (line-length=100, target-version=py311)
+- [X] T005 [P] Configure pylint linter in .pylintrc or pyproject.toml
+- [X] T006 [P] Update .gitignore to exclude outputs/ directory and Python cache files
+- [X] T007 Create __init__.py files for all Python packages (src/, src/models/, src/simulation/, src/visualization/, tests/)
 
 **Checkpoint**: Project structure ready, dependencies can be installed with `pip install -r requirements.txt`
 
@@ -42,14 +42,14 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T008 Implement SystemConfig dataclass in src/config.py with all simulation parameters (Tf, Tc, δ, τ, fs, num_bits, random_seed) and validation constraints
-- [ ] T009 Implement generate_gaussian_doublet() function in src/models/pulse.py per contract (pulse.md)
-- [ ] T010 Implement Pulse.generate() class method in src/models/pulse.py per contract
-- [ ] T011 Implement Pulse.energy property in src/models/pulse.py per contract
-- [ ] T012 [P] Write unit test test_gaussian_doublet_zero_mean() in tests/unit/test_pulse.py
-- [ ] T013 [P] Write unit test test_gaussian_doublet_peak_at_zero() in tests/unit/test_pulse.py
-- [ ] T014 [P] Write unit test test_pulse_generate() in tests/unit/test_pulse.py
-- [ ] T015 [P] Write unit test test_pulse_energy_positive() in tests/unit/test_pulse.py
+- [X] T008 Implement SystemConfig dataclass in src/config.py with all simulation parameters (Tf, Tc, δ, τ, fs, num_bits, random_seed) and validation constraints
+- [X] T009 Implement generate_gaussian_doublet() function in src/models/pulse.py per contract (pulse.md)
+- [X] T010 Implement Pulse.generate() class method in src/models/pulse.py per contract
+- [X] T011 Implement Pulse.energy property in src/models/pulse.py per contract
+- [X] T012 [P] Write unit test test_gaussian_doublet_zero_mean() in tests/unit/test_pulse.py
+- [X] T013 [P] Write unit test test_gaussian_doublet_peak_at_zero() in tests/unit/test_pulse.py
+- [X] T014 [P] Write unit test test_pulse_generate() in tests/unit/test_pulse.py
+- [X] T015 [P] Write unit test test_pulse_energy_positive() in tests/unit/test_pulse.py
 
 **Checkpoint**: Foundation ready - SystemConfig and Pulse are functional and tested. User story implementation can now begin in parallel.
 
@@ -63,16 +63,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T016 [P] [US1] Implement generate_th_code() function in src/models/modulation.py per contract (modulation.md)
-- [ ] T017 [P] [US1] Implement TimeHoppingCode dataclass in src/models/modulation.py with generate() class method
-- [ ] T018 [US1] Implement User dataclass in src/models/modulation.py with create() factory method (depends on T016, T017)
-- [ ] T019 [US1] Implement User.generate_signal() method in src/models/modulation.py per contract
-- [ ] T020 [P] [US1] Implement plot_waveform() function in src/visualization/waveform.py per research.md Section 6.2 (Matplotlib配置: dpi=300, 网格, 图例, 中文标签)
-- [ ] T021 [US1] Create demo_waveform.py script in scripts/ per quickstart.md Step 1 (config with 3 frames, generate pulse, create user, generate signal, plot and save)
-- [ ] T022 [P] [US1] Write unit test test_generate_th_code_length() in tests/unit/test_modulation.py
-- [ ] T023 [P] [US1] Write unit test test_generate_th_code_uniformity() in tests/unit/test_modulation.py
-- [ ] T024 [P] [US1] Write unit test test_user_generate_signal_length() in tests/unit/test_modulation.py
-- [ ] T025 [P] [US1] Write unit test test_user_generate_signal_reproducibility() in tests/unit/test_modulation.py
+- [X] T016 [P] [US1] Implement generate_th_code() function in src/models/modulation.py per contract (modulation.md)
+- [X] T017 [P] [US1] Implement TimeHoppingCode dataclass in src/models/modulation.py with generate() class method
+- [X] T018 [US1] Implement User dataclass in src/models/modulation.py with create() factory method (depends on T016, T017)
+- [X] T019 [US1] Implement User.generate_signal() method in src/models/modulation.py per contract
+- [X] T020 [P] [US1] Implement plot_waveform() function in src/visualization/waveform.py per research.md Section 6.2 (Matplotlib配置: dpi=300, 网格, 图例, 中文标签)
+- [X] T021 [US1] Create demo_waveform.py script in scripts/ per quickstart.md Step 1 (config with 3 frames, generate pulse, create user, generate signal, plot and save)
+- [X] T022 [P] [US1] Write unit test test_generate_th_code_length() in tests/unit/test_modulation.py
+- [X] T023 [P] [US1] Write unit test test_generate_th_code_uniformity() in tests/unit/test_modulation.py
+- [X] T024 [P] [US1] Write unit test test_user_generate_signal_length() in tests/unit/test_modulation.py
+- [X] T025 [P] [US1] Write unit test test_user_generate_signal_reproducibility() in tests/unit/test_modulation.py
 
 **Checkpoint**: At this point, User Story 1 should be fully functional. Running `python scripts/demo_waveform.py` should generate a publication-quality waveform plot in outputs/ directory. All unit tests for pulse and modulation modules should pass.
 
@@ -86,25 +86,25 @@
 
 ### Implementation for User Story 2
 
-- [ ] T026 [P] [US2] Implement Channel dataclass in src/models/channel.py with __init__ accepting config, snr_db, sir_db, nbi_frequency
-- [ ] T027 [P] [US2] Implement Channel.add_awgn() method in src/models/channel.py per contract (channel.md)
-- [ ] T028 [P] [US2] Implement Channel.add_nbi() method in src/models/channel.py per contract (预留窄带干扰接口，US3使用)
-- [ ] T029 [US2] Implement Channel.transmit() method in src/models/channel.py per contract (handles multi-user signal aggregation, depends on T026, T027, T028)
-- [ ] T030 [P] [US2] Implement Receiver dataclass in src/simulation/receiver.py with __init__ accepting config, target_user, pulse
-- [ ] T031 [P] [US2] Implement Receiver.generate_templates() method in src/simulation/receiver.py per research.md Section 4.1
-- [ ] T032 [US2] Implement Receiver.demodulate() method in src/simulation/receiver.py per contract (depends on T031)
-- [ ] T033 [P] [US2] Implement PerformanceMetrics dataclass in src/simulation/metrics.py with ber, num_errors, num_bits properties
-- [ ] T034 [P] [US2] Implement PerformanceMetrics.ber_confidence_interval() method in src/simulation/metrics.py (Wilson confidence interval)
-- [ ] T035 [P] [US2] Implement SimulationResult dataclass in src/simulation/metrics.py with to_dict() method
-- [ ] T036 [P] [US2] Implement plot_ber_vs_users() function in src/visualization/performance.py per research.md Section 6.2 (semilogy, 网格, 图例, 轴标签)
-- [ ] T037 [US2] Create demo_mui_analysis.py script in scripts/ per quickstart.md Step 2 (1000 bits for fast demo, user_counts=[1,2,3,5], SNR=10dB)
-- [ ] T038 [US2] Create run_mui_analysis.py script in scripts/ for full simulation (10000 bits, user_counts=[1,2,3,5,7,10], SNR=10dB)
-- [ ] T039 [P] [US2] Write unit test test_add_awgn_snr() in tests/unit/test_channel.py
-- [ ] T040 [P] [US2] Write unit test test_channel_transmit_multi_user() in tests/unit/test_channel.py
-- [ ] T041 [P] [US2] Write unit test test_receiver_demodulate() in tests/unit/test_receiver.py (requires mock signal)
-- [ ] T042 [P] [US2] Write unit test test_metrics_ber_calculation() in tests/unit/test_metrics.py
-- [ ] T043 [US2] Write integration test test_end_to_end_single_user() in tests/integration/test_end_to_end.py (full pipeline: config → pulse → user → channel → receiver → metrics)
-- [ ] T044 [US2] Write integration test test_end_to_end_multi_user() in tests/integration/test_end_to_end.py (validates MUI effect: BER increases with user count)
+- [X] T026 [P] [US2] Implement Channel dataclass in src/models/channel.py with __init__ accepting config, snr_db, sir_db, nbi_frequency
+- [X] T027 [P] [US2] Implement Channel.add_awgn() method in src/models/channel.py per contract (channel.md)
+- [X] T028 [P] [US2] Implement Channel.add_nbi() method in src/models/channel.py per contract (预留窄带干扰接口，US3使用)
+- [X] T029 [US2] Implement Channel.transmit() method in src/models/channel.py per contract (handles multi-user signal aggregation, depends on T026, T027, T028)
+- [X] T030 [P] [US2] Implement Receiver dataclass in src/simulation/receiver.py with __init__ accepting config, target_user, pulse
+- [X] T031 [P] [US2] Implement Receiver.generate_templates() method in src/simulation/receiver.py per research.md Section 4.1
+- [X] T032 [US2] Implement Receiver.demodulate() method in src/simulation/receiver.py per contract (depends on T031)
+- [X] T033 [P] [US2] Implement PerformanceMetrics dataclass in src/simulation/metrics.py with ber, num_errors, num_bits properties
+- [X] T034 [P] [US2] Implement PerformanceMetrics.ber_confidence_interval() method in src/simulation/metrics.py (Wilson confidence interval)
+- [X] T035 [P] [US2] Implement SimulationResult dataclass in src/simulation/metrics.py with to_dict() method
+- [X] T036 [P] [US2] Implement plot_ber_vs_users() function in src/visualization/performance.py per research.md Section 6.2 (semilogy, 网格, 图例, 轴标签)
+- [X] T037 [US2] Create demo_mui_analysis.py script in scripts/ per quickstart.md Step 2 (1000 bits for fast demo, user_counts=[1,2,3,5], SNR=10dB)
+- [X] T038 [US2] Create run_mui_analysis.py script in scripts/ for full simulation (10000 bits, user_counts=[1,2,3,5,7,10], SNR=10dB)
+- [X] T039 [P] [US2] Write unit test test_add_awgn_snr() in tests/unit/test_channel.py
+- [X] T040 [P] [US2] Write unit test test_channel_transmit_multi_user() in tests/unit/test_channel.py
+- [X] T041 [P] [US2] Write unit test test_receiver_demodulate() in tests/unit/test_receiver.py (requires mock signal)
+- [X] T042 [P] [US2] Write unit test test_metrics_ber_calculation() in tests/unit/test_metrics.py
+- [X] T043 [US2] Write integration test test_end_to_end_single_user() in tests/integration/test_end_to_end.py (full pipeline: config → pulse → user → channel → receiver → metrics)
+- [X] T044 [US2] Write integration test test_end_to_end_multi_user() in tests/integration/test_end_to_end.py (validates MUI effect: BER increases with user count)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently. Running `python scripts/demo_mui_analysis.py` should complete in ~1 minute and generate a BER vs users plot. Running `python scripts/run_mui_analysis.py` generates the full publication-quality figure (10000 bits, may take 5-10 minutes). All unit tests and integration tests should pass.
 

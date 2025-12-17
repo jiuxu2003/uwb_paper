@@ -1,12 +1,16 @@
 <!--
 Sync Impact Report:
-- Version change: 1.1.0 → 1.1.1
-- Modified principles: IX. 版本控制与远程同步 - 优化可测试标准的结构和可读性
-- Added sections: None
+- Version change: 1.1.1 → 1.2.0
+- Modified principles: None
+- Added sections: X. 学术规范与可视化标准 (Academic Standards & Visualization)
 - Removed sections: None
 - Templates requiring updates:
-  ✅ plan-template.md - 已同步版本控制检查项
-- Follow-up TODOs: None - all placeholders filled
+  ✅ plan-template.md - 需添加可视化标准检查项
+  ✅ src/visualization/waveform.py - 需更新字体配置为学术标准
+  ✅ research.md - 需添加字体配置说明
+- Follow-up TODOs:
+  - 安装宋体（SimSun）和 Times New Roman 字体（如果系统未预装）
+  - 更新所有可视化模块使用学术标准字体
 -->
 
 # UWB Paper Development Constitution
@@ -151,6 +155,61 @@ Sync Impact Report:
   - Specify 框架：`.specify/`
 - 远程仓库地址必须在项目文档中明确记录（当前：`git@github.com:jiuxu2003/uwb_paper.git`）
 
+### X. 学术规范与可视化标准 (Academic Standards & Visualization)
+
+所有用于学术论文的图表、表格和可视化内容必须遵循国际学术出版标准。字体、格式、分辨率和配色方案必须符合主流期刊要求。
+
+**理由**: 学术论文的可视化质量直接影响审稿人对研究成果的第一印象。标准化的排版和字体选择是学术规范性的体现，非标准字体可能导致论文被拒稿或要求返修。
+
+**可测试标准**:
+
+**字体标准**（严格执行）：
+- **中文内容**: 必须使用**宋体（SimSun）**或**华文宋体（STSong）**
+  - 标题、标签、图例中的中文字符
+  - 注释、说明性文字
+- **英文内容和符号**: 必须使用 **Times New Roman**
+  - 拉丁字母（A-Z, a-z）
+  - 数字（0-9）
+  - 数学符号（+, -, ×, ÷, =, etc.）
+  - 标点符号
+- **混合字体策略**: Matplotlib 配置必须使用字体列表：
+  ```python
+  # 正确配置（按优先级顺序）
+  mpl.rcParams["font.serif"] = ["Times New Roman", "SimSun", "STSong"]
+  mpl.rcParams["font.sans-serif"] = ["Arial", "SimSun", "STSong"]
+  mpl.rcParams["mathtext.fontset"] = "stix"  # STIX 字体用于数学符号
+  ```
+
+**图表质量标准**：
+- **分辨率**: 所有图表必须 ≥ 300 DPI（适合打印）
+- **尺寸**: 推荐宽度 3.5 inch（单栏）或 7 inch（双栏）
+- **文件格式**:
+  - 矢量图优先：PDF, EPS（公式、线图）
+  - 位图可用：PNG（300 DPI）、TIFF（照片、复杂图像）
+  - 禁止使用：JPG（有损压缩，不适合学术图表）
+
+**配色方案**：
+- 优先使用色盲友好配色（ColorBrewer, Viridis）
+- 黑白打印时必须可辨识（使用线型 + 标记组合）
+- 避免纯红纯绿组合（色盲无法区分）
+
+**标注规范**：
+- 坐标轴标签必须包含单位（如 "时间 (ns)", "频率 (GHz)"）
+- 图例位置不能遮挡数据
+- 网格线透明度推荐 0.3，线型为虚线
+- 标题字号 14pt，标签字号 12pt，刻度字号 10pt
+
+**验收标准**：
+- 所有图表文件名必须语义化（如 `ber_vs_users.pdf` 而非 `figure1.png`）
+- 图表目录结构：`outputs/[category]/[semantic_name].[ext]`
+- 每张图表必须附带元数据文件（生成参数、数据来源）
+- 运行可视化脚本时不能有字体警告（Glyph missing from font）
+
+**字体安装指南**：
+- Linux: `sudo apt-get install fonts-liberation ttf-mscorefonts-installer` (Times New Roman)
+- macOS: 系统自带 Times New Roman 和华文宋体
+- 验证命令: `fc-list | grep -i "times\|simsun"`
+
 ## Development Workflow
 
 ### Linus-Style Thinking Process
@@ -290,4 +349,4 @@ Sync Impact Report:
 
 对于日常开发指导（如 AI 助手的行为准则），请参考 `CLAUDE.md`。该文件定义了开发过程中的交互风格、工具使用规范和决策流程，是本宪法在实践中的具体化。
 
-**Version**: 1.1.1 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
+**Version**: 1.2.0 | **Ratified**: 2025-12-17 | **Last Amended**: 2025-12-17
