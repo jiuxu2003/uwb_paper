@@ -11,42 +11,8 @@ from matplotlib.font_manager import FontProperties
 from typing import Optional
 from pathlib import Path
 
-# 配置学术论文标准字体（Constitution v1.2.0 Principle X）
-# 标准要求：中文使用宋体（SimSun），英文/符号使用 Times New Roman
-try:
-    # 当前环境使用 Noto Sans CJK JP（支持中日韩文字）作为降级方案
-    # 注：虽然是 JP 版本，但 CJK 字符集统一，可正确渲染简体中文
-    # 优先使用学术标准字体（serif 类用于论文正文）
-    mpl.rcParams["font.serif"] = ["Times New Roman", "SimSun", "STSong", "Noto Serif CJK JP", "DejaVu Serif"]
-    # Sans-serif 用于图表标签（Noto Sans CJK JP 支持中英文）
-    mpl.rcParams["font.sans-serif"] = ["Arial", "Noto Sans CJK JP", "SimSun", "STSong", "DejaVu Sans"]
-    # 设置默认字体族为 sans-serif（图表标签的常用选择）
-    mpl.rcParams["font.family"] = "sans-serif"
-    # 数学符号使用 STIX 字体（类似 Times New Roman）
-    mpl.rcParams["mathtext.fontset"] = "stix"
-    mpl.rcParams["axes.unicode_minus"] = False  # 解决负号显示问题
-
-    # 注意：函数内部会使用 rc_context 覆盖此配置以确保字体生效
-    # 理想配置需要安装 Times New Roman（英文）和 SimSun（中文宋体）
-    # Linux 安装方法：
-    #   apt-get install fonts-noto-cjk  # Noto CJK（当前已安装）
-    #   apt-get install fonts-liberation ttf-mscorefonts-installer  # Times New Roman
-    # 验证字体：fc-list | grep -i "times\|simsun\|noto.*cjk"
-except Exception:
-    # 如果配置失败，使用默认字体
-    pass
-
-# 配置 Matplotlib 学术论文标准（参考 research.md Section 6.2）
-mpl.rcParams["savefig.dpi"] = 300  # 论文打印要求
-mpl.rcParams["figure.figsize"] = [12.0, 4.0]  # 波形图推荐尺寸
-mpl.rcParams["font.size"] = 12
-mpl.rcParams["axes.labelsize"] = 12
-mpl.rcParams["axes.titlesize"] = 14
-mpl.rcParams["xtick.labelsize"] = 10
-mpl.rcParams["ytick.labelsize"] = 10
-mpl.rcParams["legend.fontsize"] = 11
-mpl.rcParams["grid.alpha"] = 0.3
-mpl.rcParams["grid.linestyle"] = "--"
+# 导入学术标准配置（与 compliance.py 保持一致）
+from src.visualization import config
 
 
 def plot_waveform(
@@ -109,56 +75,51 @@ def plot_waveform(
             f"当前: len(time_axis)={len(time_axis)}, len(signal)={len(signal)}"
         )
 
-    # 使用 rc_context 确保字体配置生效
-    # Noto Sans CJK JP 同时支持中日韩文字（matplotlib 能识别的版本）
-    font_config = {
-        "font.sans-serif": ["Noto Sans CJK JP", "DejaVu Sans", "Arial"],
-        "axes.unicode_minus": False,
-    }
+    # 应用学术标准配置（与 compliance.py 保持一致）
+    config.setup_academic_style()
 
-    with mpl.rc_context(font_config):
-        # 创建图表
-        fig, ax = plt.subplots(figsize=figsize)
+    # 创建图表
+    fig, ax = plt.subplots(figsize=figsize)
 
-        # 转换时间轴单位为纳秒（ns）以便显示
-        time_ns = time_axis * 1e9
+    # 转换时间轴单位为纳秒（ns）以便显示
+    time_ns = time_axis * 1e9
 
-        # 绘制波形
-        ax.plot(
-            time_ns,
-            signal,
-            linewidth=1.0,
-            label="TH-PPM 信号",
-            color="#1f77b4",  # Matplotlib 默认蓝色
-        )
+    # 绘制波形
+    ax.plot(
+        time_ns,
+        signal,
+        linewidth=1.0,
+        label="TH-PPM 信号",
+        color="#1f77b4",  # Matplotlib 默认蓝色
+    )
 
-        # 设置轴标签和标题
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        ax.set_title(title)
+    # 设置轴标签和标题
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
 
-        # 添加网格
-        ax.grid(True, alpha=0.3, linestyle="--")
+    # 添加网格
+    ax.grid(True, alpha=0.3, linestyle="--")
 
-        # 添加图例
-        ax.legend(loc="upper right")
+    # 添加图例
+    ax.legend(loc="upper right")
 
-        # 紧凑布局（避免标签被裁剪）
-        plt.tight_layout()
+    # 紧凑布局（避免标签被裁剪）
+    plt.tight_layout()
 
-        # 保存图表
-        if save_path is not None:
-            save_path = Path(save_path)
-            save_path.parent.mkdir(parents=True, exist_ok=True)  # 创建目录
-            plt.savefig(save_path, dpi=300, bbox_inches="tight")
-            print(f"✓ 图表已保存到 {save_path}")
+    # 保存图表
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)  # 创建目录
+        plt.savefig(save_path, dpi=300, bbox_inches="tight")
+        print(f"✓ 图表已保存到 {save_path}")
 
-        # 显示图表
-        if show:
-            plt.show()
+    # 显示图表
+    if show:
+        plt.show()
 
-        # 关闭图表释放内存
-        plt.close(fig)
+    # 关闭图表释放内存
+    plt.close(fig)
 
 
 def plot_multi_waveforms(
@@ -201,61 +162,57 @@ def plot_multi_waveforms(
     参考:
         - research.md Section 6.2: 多子图布局标准
     """
-    # 在函数内部设置字体配置（确保每次调用都生效）
-    font_config = {
-        "font.sans-serif": ["Noto Sans CJK JP", "DejaVu Sans", "Arial"],
-        "axes.unicode_minus": False,
-    }
-
     # 验证输入
     if not signals:
         raise ValueError("signals 字典不能为空")
 
     num_signals = len(signals)
 
-    with mpl.rc_context(font_config):
-        # 创建子图
-        fig, axes = plt.subplots(num_signals, 1, figsize=figsize, sharex=True)
+    # 应用学术标准配置（与 compliance.py 保持一致）
+    config.setup_academic_style()
 
-        # 如果只有一个信号，axes 不是数组，需要包装
-        if num_signals == 1:
-            axes = [axes]
+    # 创建子图
+    fig, axes = plt.subplots(num_signals, 1, figsize=figsize, sharex=True)
 
-        # 转换时间轴单位
-        time_ns = time_axis * 1e9
+    # 如果只有一个信号，axes 不是数组，需要包装
+    if num_signals == 1:
+        axes = [axes]
 
-        # 绘制每个信号
-        for ax, (label, signal) in zip(axes, signals.items()):
-            if len(signal) != len(time_axis):
-                raise ValueError(
-                    f"信号 '{label}' 长度与 time_axis 不一致："
-                    f"len(signal)={len(signal)}, len(time_axis)={len(time_axis)}"
-                )
+    # 转换时间轴单位
+    time_ns = time_axis * 1e9
 
-            ax.plot(time_ns, signal, linewidth=0.8, label=label)
-            ax.set_ylabel(ylabel)
-            ax.grid(True, alpha=0.3, linestyle="--")
-            ax.legend(loc="upper right")
+    # 绘制每个信号
+    for ax, (label, signal) in zip(axes, signals.items()):
+        if len(signal) != len(time_axis):
+            raise ValueError(
+                f"信号 '{label}' 长度与 time_axis 不一致："
+                f"len(signal)={len(signal)}, len(time_axis)={len(time_axis)}"
+            )
 
-        # 设置 X 轴标签（只在最底部子图）
-        axes[-1].set_xlabel(xlabel)
+        ax.plot(time_ns, signal, linewidth=0.8, label=label)
+        ax.set_ylabel(ylabel)
+        ax.grid(True, alpha=0.3, linestyle="--")
+        ax.legend(loc="upper right")
 
-        # 设置总标题
-        fig.suptitle(title, fontsize=14)
+    # 设置 X 轴标签（只在最底部子图）
+    axes[-1].set_xlabel(xlabel)
 
-        # 紧凑布局
-        plt.tight_layout()
+    # 设置总标题
+    fig.suptitle(title, fontsize=14)
 
-        # 保存图表
-        if save_path is not None:
-            save_path = Path(save_path)
-            save_path.parent.mkdir(parents=True, exist_ok=True)
-            plt.savefig(save_path, dpi=300, bbox_inches="tight")
-            print(f"✓ 图表已保存到 {save_path}")
+    # 紧凑布局
+    plt.tight_layout()
 
-        # 显示图表
-        if show:
-            plt.show()
+    # 保存图表
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path, dpi=300, bbox_inches="tight")
+        print(f"✓ 图表已保存到 {save_path}")
 
-        # 关闭图表
-        plt.close(fig)
+    # 显示图表
+    if show:
+        plt.show()
+
+    # 关闭图表
+    plt.close(fig)

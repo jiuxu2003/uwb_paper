@@ -265,9 +265,9 @@ class SimulationResult:
         if self.snr_db < -10 and self.snr_db != np.inf:
             raise ValueError(f"snr_db 必须 >= -10 或 np.inf，当前值: {self.snr_db}")
 
-        # 验证 SIR
-        if self.sir_db < -20 and self.sir_db != np.inf:
-            raise ValueError(f"sir_db 必须 >= -20 或 np.inf，当前值: {self.sir_db}")
+        # 验证 SIR（扩展到-50dB以支持极强干扰测试）
+        if self.sir_db < -50 and self.sir_db != np.inf:
+            raise ValueError(f"sir_db 必须 >= -50 或 np.inf，当前值: {self.sir_db}")
 
         # 验证执行时间
         if self.execution_time < 0:

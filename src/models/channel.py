@@ -48,10 +48,13 @@ class Channel:
         """验证信道参数"""
         if self.snr_db < -10 and self.snr_db != np.inf:
             raise ValueError(f"snr_db 必须 >= -10 或 np.inf，当前值: {self.snr_db}")
-        if self.sir_db < -20 and self.sir_db != np.inf:
-            raise ValueError(f"sir_db 必须 >= -20 或 np.inf，当前值: {self.sir_db}")
+        if self.sir_db < -50 and self.sir_db != np.inf:
+            raise ValueError(f"sir_db 必须 >= -50 或 np.inf，当前值: {self.sir_db}")
         if self.nbi_frequency <= 0:
             raise ValueError(f"nbi_frequency 必须 > 0，当前值: {self.nbi_frequency}")
+
+        # 初始化调试标志（用于打印干扰信息）
+        self._debug_print_done = False
 
     def add_awgn(self, signal: np.ndarray) -> np.ndarray:
         """
@@ -153,13 +156,25 @@ class Channel:
         # 计算信号功率
         signal_power = np.mean(signal**2)
 
+        # 计算信号RMS幅度
+        signal_rms = np.sqrt(signal_power)
+
         # 计算干扰功率：P_interference = P_signal / 10^(SIR_dB/10)
+        # 注意：SIR为负值时，干扰功率 > 信号功率
         interference_power = signal_power / (10 ** (self.sir_db / 10))
 
         # 生成单频正弦波干扰：A·sin(2πft)
         # 正弦波的功率 = A²/2，因此 A = sqrt(2·P_interference)
         amplitude = np.sqrt(2 * interference_power)
         interference = amplitude * np.sin(2 * np.pi * self.nbi_frequency * time_axis)
+
+        # 打印调试信息（每个SIR值只打印一次）
+        if not self._debug_print_done:
+            print(f"      [调试] 信号功率: {signal_power:.6e}, RMS幅度: {signal_rms:.6e}")
+            print(f"      [调试] 干扰功率: {interference_power:.6e}, 幅度: {amplitude:.6e}")
+            print(f"      [调试] 功率比 (干扰/信号): {interference_power/signal_power:.2f}x ({10*np.log10(interference_power/signal_power):.1f} dB)")
+            print(f"      [调试] 幅度比 (干扰/信号): {amplitude/signal_rms:.2f}x")
+            self._debug_print_done = True
 
         return signal + interference
 

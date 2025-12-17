@@ -10,9 +10,8 @@ import matplotlib as mpl
 from typing import Optional
 from pathlib import Path
 
-# 导入字体配置（继承 waveform 模块的配置）
-# 学术论文标准：中文宋体（SimSun），英文 Times New Roman
-# 当前降级方案：Noto Sans CJK JP（支持中英文）
+# 导入学术标准配置（与 compliance.py 保持一致）
+from src.visualization import config
 
 
 def plot_ber_vs_users(
@@ -84,53 +83,49 @@ def plot_ber_vs_users(
     if len(user_counts) == 0:
         raise ValueError("user_counts 和 ber_values 不能为空")
 
-    # 字体配置（确保中文和英文都正确显示）
-    font_config = {
-        "font.sans-serif": ["Noto Sans CJK JP", "Arial", "DejaVu Sans"],
-        "axes.unicode_minus": False,
-    }
+    # 应用学术标准配置（与 compliance.py 保持一致）
+    config.setup_academic_style()
 
-    with mpl.rc_context(font_config):
-        # 创建图表
-        fig, ax = plt.subplots(figsize=figsize)
+    # 创建图表
+    fig, ax = plt.subplots(figsize=figsize)
 
-        # 绘制 BER 曲线（对数坐标）
-        ax.semilogy(
-            user_counts,
-            ber_values,
-            "o-",  # 圆圈标记 + 实线
-            linewidth=2,
-            markersize=8,
-            label=f"SNR={snr_db:.0f}dB",
-            color="#1f77b4",  # Matplotlib 默认蓝色（colorblind-friendly）
-        )
+    # 绘制 BER 曲线（对数坐标）
+    ax.semilogy(
+        user_counts,
+        ber_values,
+        "o-",  # 圆圈标记 + 实线
+        linewidth=2,
+        markersize=8,
+        label=f"SNR={snr_db:.0f}dB",
+        color="#1f77b4",  # Matplotlib 默认蓝色（colorblind-friendly）
+    )
 
-        # 设置轴标签和标题
-        ax.set_xlabel(xlabel, fontsize=12)
-        ax.set_ylabel(ylabel, fontsize=12)
-        ax.set_title(title, fontsize=14)
+    # 设置轴标签和标题
+    ax.set_xlabel(xlabel, fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=12)
+    ax.set_title(title, fontsize=14)
 
-        # 启用网格（对数坐标需要 both 参数）
-        ax.grid(True, which="both", alpha=0.3, linestyle="--")
+    # 启用网格（对数坐标需要 both 参数）
+    ax.grid(True, which="both", alpha=0.3, linestyle="--")
 
-        # 添加图例
-        ax.legend(loc="best", fontsize=11)
+    # 添加图例
+    ax.legend(loc="best", fontsize=11)
 
-        # 调整布局（避免标签被裁剪）
-        plt.tight_layout()
+    # 调整布局（避免标签被裁剪）
+    plt.tight_layout()
 
-        # 保存图表
-        if save_path:
-            save_path = Path(save_path)
-            save_path.parent.mkdir(parents=True, exist_ok=True)
-            plt.savefig(save_path, dpi=300, bbox_inches="tight")
-            print(f"✓ 图表已保存到 {save_path}")
+    # 保存图表
+    if save_path:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path, dpi=300, bbox_inches="tight")
+        print(f"✓ 图表已保存到 {save_path}")
 
-        # 显示图表
-        if show:
-            plt.show()
-        else:
-            plt.close()
+    # 显示图表
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
 
 def plot_ber_vs_sir(
@@ -198,50 +193,46 @@ def plot_ber_vs_sir(
     if len(sir_db) == 0:
         raise ValueError("sir_db 和 ber_values 不能为空")
 
-    # 字体配置（确保中文和英文都正确显示）
-    font_config = {
-        "font.sans-serif": ["Noto Sans CJK JP", "Arial", "DejaVu Sans"],
-        "axes.unicode_minus": False,
-    }
+    # 应用学术标准配置（与 compliance.py 保持一致）
+    config.setup_academic_style()
 
-    with mpl.rc_context(font_config):
-        # 创建图表
-        fig, ax = plt.subplots(figsize=figsize)
+    # 创建图表
+    fig, ax = plt.subplots(figsize=figsize)
 
-        # 绘制 BER 曲线（对数坐标，红色方块标记）
-        ax.semilogy(
-            sir_db,
-            ber_values,
-            "s-",  # 方块标记 + 实线
-            linewidth=2,
-            markersize=8,
-            label="单用户",
-            color="red",  # 任务规范要求使用红色
-        )
+    # 绘制 BER 曲线（对数坐标，红色方块标记）
+    ax.semilogy(
+        sir_db,
+        ber_values,
+        "s-",  # 方块标记 + 实线
+        linewidth=2,
+        markersize=8,
+        label="单用户",
+        color="red",  # 任务规范要求使用红色
+    )
 
-        # 设置轴标签和标题
-        ax.set_xlabel(xlabel, fontsize=12)
-        ax.set_ylabel(ylabel, fontsize=12)
-        ax.set_title(title, fontsize=14)
+    # 设置轴标签和标题
+    ax.set_xlabel(xlabel, fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=12)
+    ax.set_title(title, fontsize=14)
 
-        # 启用网格（对数坐标需要 both 参数）
-        ax.grid(True, which="both", alpha=0.3, linestyle="--")
+    # 启用网格（对数坐标需要 both 参数）
+    ax.grid(True, which="both", alpha=0.3, linestyle="--")
 
-        # 添加图例
-        ax.legend(loc="best", fontsize=11)
+    # 添加图例
+    ax.legend(loc="best", fontsize=11)
 
-        # 调整布局（避免标签被裁剪）
-        plt.tight_layout()
+    # 调整布局（避免标签被裁剪）
+    plt.tight_layout()
 
-        # 保存图表
-        if save_path:
-            save_path = Path(save_path)
-            save_path.parent.mkdir(parents=True, exist_ok=True)
-            plt.savefig(save_path, dpi=300, bbox_inches="tight")
-            print(f"✓ 图表已保存到 {save_path}")
+    # 保存图表
+    if save_path:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path, dpi=300, bbox_inches="tight")
+        print(f"✓ 图表已保存到 {save_path}")
 
-        # 显示图表
-        if show:
-            plt.show()
-        else:
-            plt.close()
+    # 显示图表
+    if show:
+        plt.show()
+    else:
+        plt.close()
