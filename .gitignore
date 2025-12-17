@@ -93,3 +93,9 @@ desktop.ini
 *.crt
 secrets/
 credentials/
+
+# 仿真输出文件 (Simulation Outputs)
+outputs/
+*.png
+*.pdf
+*.npz

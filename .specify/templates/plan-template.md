@@ -31,7 +31,19 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+验证以下原则是否得到遵守（参考 `.specify/memory/constitution.md`）：
+
+- [ ] **生态复用优先**: 是否优先使用成熟库和官方 SDK？所有依赖是否锁定版本号？
+- [ ] **质量第一**: 技术方案是否基于证据（benchmark、文档）而非猜测？
+- [ ] **工具优先**: 是否使用既定工具链（linter、formatter、migration tools）？
+- [ ] **透明记录**: 关键决策是否记录在 specs/ 或 docs/？代码是否有中文文档？
+- [ ] **结果导向**: 是否定义了可测量的成功标准（SLO/SLI）？
+- [ ] **简单优先**: 是否避免了过度设计？实现是否遵循"最简方案"原则？
+- [ ] **向后兼容**: 变更是否会破坏现有 API？是否需要迁移方案？
+- [ ] **安全第一**: 是否验证用户输入？敏感信息是否通过密钥管理注入？
+- [ ] **版本控制与远程同步**: `.gitignore` 是否正确配置？Commit message 是否遵循约定式提交？
+
+如有违反，必须在"Complexity Tracking"部分说明理由。
 
 ## Project Structure
 
