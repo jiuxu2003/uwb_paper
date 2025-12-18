@@ -23,7 +23,8 @@ def plot_psd_fcc_compliance(
     frequencies: np.ndarray,
     compliance_result: Dict,
     title: str = "UWB 脉冲 PSD 与 FCC 室内掩蔽罩对比",
-    output_path: Optional[str] = None
+    output_path: Optional[str] = None,
+    show_title: bool = False
 ) -> None:
     """
     绘制脉冲 PSD 与 FCC 掩蔽罩对比图
@@ -84,7 +85,8 @@ def plot_psd_fcc_compliance(
     # 设置坐标轴标签
     ax.set_xlabel('频率 (GHz)', fontsize=12, fontweight='normal')
     ax.set_ylabel('功率谱密度 (dBm/MHz)', fontsize=12, fontweight='normal')
-    ax.set_title(title, fontsize=14, fontweight='bold', pad=15)
+    if show_title:
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=15)
 
     # 设置坐标轴范围
     ax.set_xlim(0, 12)  # 0-12 GHz

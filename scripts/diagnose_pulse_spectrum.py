@@ -115,7 +115,7 @@ def main():
     ax1.plot(pulse.time_axis * 1e9, pulse.waveform, linewidth=1.5)
     ax1.set_xlabel("时间 (ns)")
     ax1.set_ylabel("幅度")
-    ax1.set_title(f"二阶高斯导数脉冲 (τ={sys_config.pulse_tau*1e9:.2f} ns)")
+    # ax1.set_title(f"二阶高斯导数脉冲 (τ={sys_config.pulse_tau*1e9:.2f} ns)")  # 标题已移除（用于论文）
     ax1.grid(True, alpha=0.3, linestyle="--")
 
     # 子图2: 频谱（0-10 GHz）
@@ -138,7 +138,7 @@ def main():
 
     ax2.set_xlabel("频率 (GHz)")
     ax2.set_ylabel("幅度 (dB)")
-    ax2.set_title("脉冲频谱（归一化）")
+    # ax2.set_title("脉冲频谱（归一化）")  # 标题已移除（用于论文）
     ax2.grid(True, alpha=0.3, linestyle="--")
     ax2.legend(loc="upper right", fontsize=9)
     ax2.set_ylim(-40, 5)  # 显示-40dB到峰值

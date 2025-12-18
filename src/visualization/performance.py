@@ -23,6 +23,7 @@ def plot_ber_vs_users(
     ylabel: str = "误码率 (BER)",
     save_path: Optional[str] = None,
     show: bool = True,
+    show_title: bool = False,
     figsize: tuple = (8, 6),
 ) -> None:
     """
@@ -103,7 +104,8 @@ def plot_ber_vs_users(
     # 设置轴标签和标题
     ax.set_xlabel(xlabel, fontsize=12)
     ax.set_ylabel(ylabel, fontsize=12)
-    ax.set_title(title, fontsize=14)
+    if show_title:
+        ax.set_title(title, fontsize=14)
 
     # 启用网格（对数坐标需要 both 参数）
     ax.grid(True, which="both", alpha=0.3, linestyle="--")
@@ -136,6 +138,7 @@ def plot_ber_vs_sir(
     ylabel: str = "误码率 (BER)",
     save_path: Optional[str] = None,
     show: bool = True,
+    show_title: bool = False,
     figsize: tuple = (8, 6),
 ) -> None:
     """
@@ -213,7 +216,8 @@ def plot_ber_vs_sir(
     # 设置轴标签和标题
     ax.set_xlabel(xlabel, fontsize=12)
     ax.set_ylabel(ylabel, fontsize=12)
-    ax.set_title(title, fontsize=14)
+    if show_title:
+        ax.set_title(title, fontsize=14)
 
     # 启用网格（对数坐标需要 both 参数）
     ax.grid(True, which="both", alpha=0.3, linestyle="--")

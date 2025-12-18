@@ -24,6 +24,7 @@ def plot_waveform(
     figsize: tuple = (12, 4),
     save_path: Optional[str] = None,
     show: bool = False,
+    show_title: bool = False,
 ) -> None:
     """
     绘制时域波形图（学术论文级别）
@@ -96,7 +97,8 @@ def plot_waveform(
     # 设置轴标签和标题
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.set_title(title)
+    if show_title:
+        ax.set_title(title)
 
     # 添加网格
     ax.grid(True, alpha=0.3, linestyle="--")

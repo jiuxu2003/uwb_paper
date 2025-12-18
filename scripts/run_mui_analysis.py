@@ -166,7 +166,10 @@ def main():
     ber_10users = ber_results[-1]
     print(f"  单用户 BER: {ber_single:.4e}")
     print(f"  10 用户 BER: {ber_10users:.4e}")
-    print(f"  性能退化: {ber_10users/ber_single:.1f}x")
+    if ber_single > 0:
+        print(f"  性能退化: {ber_10users/ber_single:.1f}x")
+    else:
+        print(f"  性能退化: 无法计算（单用户 BER = 0）")
     print("=" * 60)
 
     print("\n✅ 完整仿真完成！图表已保存到 outputs/ber_vs_users.png")
